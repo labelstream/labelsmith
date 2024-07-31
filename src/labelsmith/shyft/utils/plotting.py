@@ -221,7 +221,7 @@ class Plotting:
     @staticmethod
     def plot_productivity_default():
         plotter = Plotting()
-        plotter.plot_interactive_trend(window=7, metric='tasks')
+        plotter.plot_interactive_trend(window=7, metric='time')
 
     @staticmethod
     def plot_productivity_custom():
