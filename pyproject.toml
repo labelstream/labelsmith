@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "labelsmith"
+version = "0.0.1a6"
+description = "A productivity suite for data annotators"
+authors = ["K. LeBryce <k.lebryce@pm.me>"]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [{include = "labelsmith", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9,<3.13"
+pandas = "^2.2.2"
+appdirs = "^1.4.4"
+matplotlib = "^3.9.1"
+cryptography = "^43.0.0"
+mpld3 = "^0.5.10"
+pyinstaller = "^6.9.0"
+nltk = "^3.8.1"
+
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.8.3"
+black = "^24.4.2"
+pyinstaller = "^6.5.0"
+nuitka = "^2.4.2"
+
+[tool.poetry.scripts]
+shyft = "labelsmith.shyft.Shyft:main"
+build-shyft = "scripts.build:build_shyft"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.urls]
+"Homepage" = "https://github.com/kosmolebryce/labelsmith"
+"Bug Tracker" = "https://github.com/kosmolebryce/labelsmith/issues"
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
