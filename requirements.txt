@@ -30,7 +30,7 @@ python-dateutil==2.9.0.post0 ; python_version >= "3.9" and python_version < "3.1
 pytz==2024.1 ; python_version >= "3.9" and python_version < "3.13"
 pywin32-ctypes==0.2.2 ; python_version >= "3.9" and python_version < "3.13" and sys_platform == "win32"
 regex==2024.7.24 ; python_version >= "3.9" and python_version < "3.13"
-setuptools==71.1.0 ; python_version >= "3.9" and python_version < "3.13"
+setuptools==72.1.0 ; python_version >= "3.9" and python_version < "3.13"
 six==1.16.0 ; python_version >= "3.9" and python_version < "3.13"
 tqdm==4.66.4 ; python_version >= "3.9" and python_version < "3.13"
 tzdata==2024.1 ; python_version >= "3.9" and python_version < "3.13"

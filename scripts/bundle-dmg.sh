@@ -2,7 +2,7 @@
 
 # Define variables
 APP_NAME="Shyft.app"
-DMG_NAME="Shyft-0.0.1a6.dmg" # Modify to suit current version
+DMG_NAME="Shyft-0.0.1b1.dmg" # Modify to suit current version
 SOURCE_DIR="./Shyft.app"
 DEST_DIR="./output"
 BACKGROUND_IMG="./src/labelsmith/shyft/resources/dmg-background.png"
