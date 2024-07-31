@@ -1,15 +1,18 @@
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 import mpld3
 from mpld3 import plugins
 from typing import Dict, List, Union, Tuple, Optional
 from pathlib import Path
 import json
 import tempfile
+import threading
 import webbrowser
 import logging
 from datetime import datetime
@@ -72,101 +75,111 @@ class Plotting:
                                figsize: Tuple[int, int] = (1240, 780),
                                auto_open: bool = True,
                                metric: str = 'tasks') -> str:
-        trend = self.productivity_earnings_trend(window)
-        
-        if start_date:
-            trend = trend[trend['Date'] >= pd.to_datetime(start_date)]
-        if end_date:
-            trend = trend[trend['Date'] <= pd.to_datetime(end_date)]
+        def generate_plot():
+            nonlocal save_path
+            trend = self.productivity_earnings_trend(window)
+            
+            if start_date:
+                trend = trend[trend['Date'] >= pd.to_datetime(start_date)]
+            if end_date:
+                trend = trend[trend['Date'] <= pd.to_datetime(end_date)]
 
-        fig, ax = plt.subplots(figsize=(figsize[0]/100, figsize[1]/100))
-        
-        min_earnings = trend['Gross_pay'].min()
-        max_earnings = trend['Gross_pay'].max()
-        
-        if metric == 'tasks':
-            y_column = 'Tasks_completed'
-            rolling_column = 'Rolling_Tasks'
-            y_label = 'Tasks Completed'
-            tooltip_label = 'Daily Tasks'
-        elif metric == 'time':
-            y_column = 'Avg time per task (min)'
-            rolling_column = 'Rolling_Avg_Time'
-            y_label = 'Average Time per Task (minutes)'
-            tooltip_label = 'Avg Time per Task'
-        else:
-            raise ValueError("Invalid metric. Choose 'tasks' or 'time'.")
+            logger.debug(f"Columns in trend DataFrame: {trend.columns.tolist()}")
+            if 'Gross_pay' not in trend.columns:
+                logger.error("Column 'Gross_pay' is missing from the trend DataFrame.")
+                return
 
-        valid_data = trend.dropna(subset=[y_column, rolling_column, 'Gross_pay'])
-        
-        if valid_data.empty:
-            logger.warning("No valid data available for plotting.")
-            return ""
-        
-        scatter = ax.scatter(valid_data['Date'], valid_data[y_column], 
-                             c=valid_data['Gross_pay'], cmap='viridis', 
-                             s=50, alpha=0.8,
-                             vmin=min_earnings, vmax=max_earnings)
-        
-        line, = ax.plot(valid_data['Date'], valid_data[rolling_column], alpha=0.5, color='red', linewidth=2)
+            fig = Figure(figsize=(figsize[0]/100, figsize[1]/100))
+            ax = fig.add_subplot(111)
 
-        ax.set_title(f'{window}-Day Rolling Average: {y_label} and Earnings', fontsize=14, pad=20)
-        ax.set_xlabel('Date', fontsize=12, labelpad=10)
-        ax.set_ylabel(y_label, fontsize=12, labelpad=10)
-        
-        cbar = plt.colorbar(scatter, label='Daily Gross Pay')
-        cbar.ax.tick_params(labelsize=10)
-        cbar.ax.set_ylabel('Daily Gross Pay', fontsize=12, labelpad=10)
-        
-        cbar.set_ticks([min_earnings, (min_earnings + max_earnings) / 2, max_earnings])
-        cbar.set_ticklabels([f'${min_earnings:.2f}', f'${(min_earnings + max_earnings) / 2:.2f}', f'${max_earnings:.2f}'])
+            min_earnings = trend['Gross_pay'].min()
+            max_earnings = trend['Gross_pay'].max()
+            
+            if metric == 'tasks':
+                y_column = 'Tasks_completed'
+                rolling_column = 'Rolling_Tasks'
+                y_label = 'Tasks Completed'
+                tooltip_label = 'Daily Tasks'
+            elif metric == 'time':
+                y_column = 'Avg time per task (min)'
+                rolling_column = 'Rolling_Avg_Time'
+                y_label = 'Average Time per Task (minutes)'
+                tooltip_label = 'Avg Time per Task'
+            else:
+                raise ValueError("Invalid metric. Choose 'tasks' or 'time'.")
 
-        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
-        ax.xaxis.set_minor_locator(mdates.DayLocator())
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        plt.setp(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10)
+            valid_data = trend.dropna(subset=[y_column, rolling_column, 'Gross_pay'])
+            
+            scatter = ax.scatter(valid_data['Date'], valid_data[y_column], 
+                                c=valid_data['Gross_pay'], cmap='viridis', 
+                                s=50, alpha=0.8,
+                                vmin=min_earnings, vmax=max_earnings)
+            
+            line, = ax.plot(valid_data['Date'], valid_data[rolling_column], alpha=0.5, color='red', linewidth=2)
 
-        max_y = valid_data[y_column].max()
-        min_y = valid_data[y_column].min()
-        ax.set_ylim(min_y * 0.9, max_y * 1.1)
-        plt.setp(ax.get_yticklabels(), fontsize=10)
+            ax.set_title(f'{window}-Day Rolling Average: {y_label} and Earnings', fontsize=14, pad=20)
+            ax.set_xlabel('Date', fontsize=12, labelpad=10)
+            ax.set_ylabel(y_label, fontsize=12, labelpad=10)
+            
+            cbar = fig.colorbar(scatter, ax=ax, label='Daily Gross Pay')
+            cbar.ax.tick_params(labelsize=10)
+            cbar.ax.set_ylabel('Daily Gross Pay', fontsize=12, labelpad=10)
+            
+            cbar.set_ticks([min_earnings, (min_earnings + max_earnings) / 2, max_earnings])
+            cbar.set_ticklabels([f'${min_earnings:.2f}', f'${(min_earnings + max_earnings) / 2:.2f}', f'${max_earnings:.2f}'])
 
-        ax.grid(True, linestyle='--', color='#E0E0E0', alpha=0.1)
-        
-        legend = ax.legend([line, scatter], ['Rolling Average', f'Daily {y_label}'], 
-                           loc='upper left', fontsize=10, framealpha=0.95)
-        legend.get_frame().set_facecolor('#F8F8F8')
+            ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+            ax.xaxis.set_minor_locator(mdates.DayLocator())
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+            ax.tick_params(axis='x', rotation=45, labelsize=10)
 
-        plt.tight_layout(pad=2.0)
+            # Correct way to set horizontal alignment
+            for label in ax.get_xticklabels():
+                label.set_ha('right')
 
-        tooltip = plugins.PointHTMLTooltip(
-            scatter,
-            labels=[f"Date: {d:%Y-%m-%d}<br>{tooltip_label}: {t:.1f}<br>Rolling Avg: {r:.1f}<br>Earnings: ${e:.2f}" 
-                    for d, t, r, e in zip(valid_data['Date'], valid_data[y_column], valid_data[rolling_column], valid_data['Gross_pay'])],
-            voffset=10,
-            hoffset=10
-        )
-        plugins.connect(fig, tooltip)
+            max_y = valid_data[y_column].max()
+            min_y = valid_data[y_column].min()
+            ax.set_ylim(min_y * 0.9, max_y * 1.1)
+            ax.tick_params(axis='y', labelsize=10)
 
-        if not save_path:
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.html') as tmp:
-                save_path = tmp.name
+            ax.grid(True, linestyle='--', color='#E0E0E0', alpha=0.1)
+            
+            legend = ax.legend([line, scatter], ['Rolling Average', f'Daily {y_label}'], 
+                            loc='upper left', fontsize=10, framealpha=0.95)
+            legend.get_frame().set_facecolor('#F8F8F8')
 
-        if isinstance(save_path, str):
-            save_path = APP_DATA_DIR / save_path
+            fig.tight_layout(pad=2.0)
 
-        html = mpld3.fig_to_html(fig)
-        html = html.replace('<div id="', f'<div style="width: {figsize[0]}px; height: {figsize[1]}px;" id="')
-        
-        with open(save_path, 'w') as f:
-            f.write(html)
-        
-        logger.info(f"Interactive plot saved to: {save_path}")
-        
-        if auto_open:
-            webbrowser.open('file://' + str(save_path.resolve()))
+            tooltip = plugins.PointHTMLTooltip(
+                scatter,
+                labels=[f"Date: {d:%Y-%m-%d}<br>{tooltip_label}: {t:.1f}<br>Rolling Avg: {r:.1f}<br>Earnings: ${e:.2f}" 
+                        for d, t, r, e in zip(valid_data['Date'], valid_data[y_column], valid_data[rolling_column], valid_data['Gross_pay'])],
+                voffset=10,
+                hoffset=10
+            )
+            plugins.connect(fig, tooltip)
 
-        plt.close(fig)
+            if not save_path:
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.html') as tmp:
+                    save_path = tmp.name
+
+            if isinstance(save_path, str):
+                save_path = APP_DATA_DIR / save_path
+
+            html = mpld3.fig_to_html(fig)
+            html = html.replace('<div id="', f'<div style="width: {figsize[0]}px; height: {figsize[1]}px;" id="')
+            
+            with open(save_path, 'w') as f:
+                f.write(html)
+            
+            logger.info(f"Interactive plot saved to: {save_path}")
+            
+            if auto_open:
+                webbrowser.open('file://' + str(save_path.resolve()))
+
+        plot_thread = threading.Thread(target=generate_plot)
+        plot_thread.start()
+        plot_thread.join()  # Wait for the plotting to finish
         
         return str(save_path)
 

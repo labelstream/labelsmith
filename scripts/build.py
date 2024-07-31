@@ -58,10 +58,11 @@ def build_shyft():
         "--include-module=matplotlib.figure",
         "--include-module=matplotlib.pyplot",
         "--include-module=matplotlib.dates",
+        "--include-module=matplotlib.backends",
         "--include-module=mpld3",
         "--include-module=mpld3.plugins",
         # "--include-module=multiprocessing",
-        # "--include-module=threading",
+        "--include-module=threading",
         # "--include-module=subprocess",
         "--include-module=nltk",
         "--include-module=pandas",
@@ -76,7 +77,7 @@ def build_shyft():
 
     # Set environment variables
     env = os.environ.copy()
-    env['MPLBACKEND'] = 'TkAgg'
+    env['MPLBACKEND'] = 'Agg'
     env['NLTK_DATA'] = str(Path(__file__).parent.parent.resolve() / "src/labelsmith/shyft/resources/nltk_data")
 
     logging.info("Starting Shyft build process...")

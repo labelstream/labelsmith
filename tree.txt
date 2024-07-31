@@ -4,6 +4,7 @@ labelsmith
 ├── README.md
 ├── docs
 ├── output
+│   └── Shyft-0.0.1b1.dmg
 ├── poetry.lock
 ├── pyproject.toml
 ├── requirements.txt
@@ -69,4 +70,4 @@ labelsmith
 │   └── __init__.py
 └── tree.txt
 
-16 directories, 54 files
+16 directories, 55 files

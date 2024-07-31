@@ -159,7 +159,8 @@ class ShyftGUI:
             messagebox.showerror("Error", "Please select a shift to delete.")
             return
         selected_id = selected_item[0]
-        if messagebox.askyesno("Confirm Delete", "Are you sure you want to delete the selected shift?"):
+        
+        def on_confirm():
             try:
                 data_manager.delete_shift(selected_id)
                 self.refresh_view()
@@ -167,9 +168,57 @@ class ShyftGUI:
             except Exception as e:
                 messagebox.showerror("Error", f"An error occurred while deleting the shift: {str(e)}")
                 logger.error(f"Failed to delete shift {selected_id}: {str(e)}")
+            finally:
+                self.root.after(100, self.regain_focus)
+
+        def on_cancel():
+            self.root.after(100, self.regain_focus)
+
+        # Create a custom dialog
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Confirm Delete")
+        dialog.geometry("340x100")
+        dialog.transient(self.root)
+        dialog.grab_set()
+        dialog.resizable(False, False)
+
+        label = ttk.Label(dialog, text="Are you sure you want to delete the selected shift?")
+        label.pack(pady=10)
+
+        button_frame = ttk.Frame(dialog)
+        button_frame.pack(pady=10)
+
+        yes_button = ttk.Button(button_frame, text="Yes", command=lambda: [on_confirm(), dialog.destroy()])
+        yes_button.pack(side=tk.LEFT, padx=10)
+
+        no_button = ttk.Button(button_frame, text="No", command=lambda: [on_cancel(), dialog.destroy()])
+        no_button.pack(side=tk.LEFT, padx=10)
+
+        def invoke_focused_button(event):
+            focused = dialog.focus_get()
+            if focused in (yes_button, no_button):
+                focused.invoke()
+
+        # Bind Enter key to invoke the focused button
+        dialog.bind("<Return>", invoke_focused_button)
+        
+        # Set focus to the No button by default
+        no_button.focus_set()
+
+        # Use after() to ensure no_button keeps focus
+        dialog.after(10, no_button.focus_set)
+
+        self.root.wait_window(dialog)
+
+    def regain_focus(self):
+        self.root.focus_force()
+        self.tree.focus_set()
+        if self.tree.get_children():
+            self.tree.selection_set(self.tree.get_children()[0])
+            self.tree.focus(self.tree.get_children()[0])
 
     def view_logs(self, event=None):
-        return ViewLogsDialog(self.root)
+        return ViewLogsDialog(self.root, self.tree, self.refresh_view)
 
     def calculate_totals(self, event=None):
         return CalculateTotalsDialog(self.root)
@@ -183,7 +232,8 @@ class ShyftGUI:
             self.btn_text_color,
             self.config,
             self.menu_bar,
-            self.refresh_view
+            self.refresh_view,
+            self.tree
             )
         return autologger.start()
 

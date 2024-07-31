@@ -8,15 +8,28 @@ from labelsmith.shyft.constants import CONFIG_FILE, LOGS_DIR
 import os
 from pathlib import Path
 
-
 class ViewLogsDialog:
-    def __init__(self, parent):
+    def __init__(self, parent, tree, callback):
+        self.parent = parent
         self.window = tk.Toplevel(parent)
         self.window.title("View Logs")
         self.window.geometry("480x640")
         self.create_widgets()
+        self.parent.tree = tree
+        self.parent.callback = callback
         self.window.bind(f"<{get_modifier_key()}-w>", self.close_window)
         self.window.bind(f"<{get_modifier_key()}-W>", self.close_window)
+
+        # Ensure the window has focus
+        self.window.grab_set()
+        self.log_tree.focus_set()
+
+        # Select the first item (most recent log) if available and set focus
+        first_item = self.log_tree.get_children()
+        if first_item:
+            self.log_tree.selection_set(first_item[0])
+            self.log_tree.focus(first_item[0])
+            self.log_tree.event_generate("<<TreeviewSelect>>")
 
     def create_widgets(self):
         tree_frame = ttk.Frame(self.window)
@@ -41,13 +54,6 @@ class ViewLogsDialog:
 
         self.log_tree.bind("<<TreeviewSelect>>", self.on_log_selection)
 
-        # Select the first item (most recent log) if available
-        first_item = self.log_tree.get_children()
-        if first_item:
-            self.log_tree.selection_set(first_item[0])
-            self.log_tree.focus(first_item[0])
-            self.log_tree.event_generate("<<TreeviewSelect>>")
-
     def on_log_selection(self, event):
         for item in self.log_tree.get_children():
             self.log_tree.item(item, tags=())
@@ -58,7 +64,7 @@ class ViewLogsDialog:
 
             log_file_path = Path(LOGS_DIR) / selected_item[0]  # Update this path
             try:
-                with open(log_file_path, "r") as file:
+                with open(log_file_path, "r", encoding="utf-8") as file:
                     content = file.read()
                 self.text_widget.delete("1.0", tk.END)
                 self.text_widget.insert("1.0", content)
@@ -67,7 +73,11 @@ class ViewLogsDialog:
                 self.text_widget.insert("1.0", f"Error reading log file: {str(e)}")
 
     def close_window(self, event):
+        self.window.grab_release()
         self.window.destroy()
+        self.parent.grab_set()
+        self.parent.tree.focus_set()
+        self.parent.callback()
 
 class CalculateTotalsDialog:
     def __init__(self, parent):

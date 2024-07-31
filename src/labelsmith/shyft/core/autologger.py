@@ -22,8 +22,11 @@ class Autologger:
         btn_text_color,
         config,
         menu_bar,
-        refresh_view):
+        callback,
+        tree):
         self.parent = parent
+        self.parent.callback = callback
+        self.parent.tree = tree
         self.timer_window = timer_window
         self.time_color = time_color
         self.bg_color = bg_color
@@ -33,7 +36,6 @@ class Autologger:
         self.task_start_time = None
         self.caffeinate_process = None
         self.menu_bar = menu_bar
-        self.refresh_view = refresh_view
 
     def start(self):
         shared_data = self.collect_shared_data()
@@ -218,7 +220,10 @@ class Autologger:
             self.log_shift()
         
         self.allow_sleep()  # Ensure caffeinate is terminated when the app quits
-        self.refresh_view()
+        self.parent.grab_set()
+        self.parent.tree.focus_set()
+        self.parent.callback()
+
 
     def log_shift(self):
         if self.timer_window and tk.Toplevel.winfo_exists(self.timer_window.root):
