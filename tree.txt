@@ -1,0 +1,72 @@
+labelsmith
+├── CONTRIBUTING.md
+├── LICENSE
+├── README.md
+├── docs
+├── output
+├── poetry.lock
+├── pyproject.toml
+├── requirements.txt
+├── scripts
+│   ├── build.py
+│   ├── bundle-dmg.sh
+│   └── poetry-pip-depsync.sh
+├── src
+│   └── labelsmith
+│       ├── __init__.py
+│       ├── shyft
+│       │   ├── Shyft.py
+│       │   ├── __init__.py
+│       │   ├── __main__.py
+│       │   ├── constants.py
+│       │   ├── core
+│       │   │   ├── __init__.py
+│       │   │   ├── autologger.py
+│       │   │   ├── config_manager.py
+│       │   │   ├── data_manager.py
+│       │   │   └── nltk_manager.py
+│       │   ├── gui
+│       │   │   ├── __init__.py
+│       │   │   ├── custom_widgets.py
+│       │   │   ├── dialogs.py
+│       │   │   ├── entry_forms.py
+│       │   │   ├── main_window.py
+│       │   │   ├── menu.py
+│       │   │   └── timer_window.py
+│       │   ├── resources
+│       │   │   ├── dmg-background.png
+│       │   │   ├── entitlements.plist
+│       │   │   ├── icon.icns
+│       │   │   ├── icon.ico
+│       │   │   ├── icon.iconset
+│       │   │   │   ├── Contents.json
+│       │   │   │   ├── icon_1024x1024.png
+│       │   │   │   ├── icon_128x128.png
+│       │   │   │   ├── icon_16x16.png
+│       │   │   │   ├── icon_256x256.png
+│       │   │   │   ├── icon_32x32.png
+│       │   │   │   ├── icon_512x512.png
+│       │   │   │   └── icon_64x64.png
+│       │   │   └── nltk_data
+│       │   │       └── corpora
+│       │   │           └── wordnet.zip
+│       │   └── utils
+│       │       ├── __init__.py
+│       │       ├── error_handler.py
+│       │       ├── file_utils.py
+│       │       ├── log_config.py
+│       │       ├── plotting.py
+│       │       ├── system_utils.py
+│       │       ├── theme_manager.py
+│       │       └── time_utils.py
+│       └── utils
+│           ├── __init__.py
+│           ├── crypt.py
+│           ├── income.py
+│           ├── metrics.py
+│           └── task.py
+├── tests
+│   └── __init__.py
+└── tree.txt
+
+16 directories, 54 files

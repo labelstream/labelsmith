@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Enable App Sandbox for security -->
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+    
+    <!-- Allow reading and writing of user-selected files -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    
+    <!-- Allow execution of user-selected files (for potential future extensibility) -->
+    <key>com.apple.security.files.user-selected.executable</key>
+    <true/>
+    
+    <!-- Allow creation and use of security-scoped bookmarks -->
+    <key>com.apple.security.files.bookmarks.app-scope</key>
+    <true/>
+    
+    <!-- Enable Just-In-Time compilation for Python operations -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    
+    <!-- Allow outgoing network connections -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    
+    <!-- Grant read-write access to specific app directories -->
+    <key>com.apple.security.temporary-exception.files.home-relative-path.read-write</key>
+    <array>
+        <string>/Library/Application Support/Labelsmith/</string>
+        <string>/Library/Application Support/Labelsmith/Shyft/</string>
+        <string>/Library/Caches/Labelsmith/</string>
+        <string>/Library/Caches/Labelsmith/Shyft/</string>
+        <string>/.config/Labelsmith/</string>
+        <string>/.config/Labelsmith/Shyft/</string>
+    </array>
+    
+    <!-- Support automatic switching between integrated and discrete GPUs -->
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+    
+    <!-- Indicate support for high-resolution (Retina) displays -->
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    
+    <!-- Prevent App Nap to ensure accurate timer functionality -->
+    <key>NSAppSleepDisabled</key>
+    <true/>
+</dict>
+</plist>
