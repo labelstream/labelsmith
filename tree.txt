@@ -9,8 +9,8 @@ labelsmith
 ├── pyproject.toml
 ├── requirements.txt
 ├── scripts
-│   ├── build.py
-│   ├── bundle-dmg.sh
+│   ├── build_macos.py
+│   ├── build_windows.py
 │   └── poetry-pip-depsync.sh
 ├── src
 │   └── labelsmith
