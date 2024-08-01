@@ -33,6 +33,7 @@ def build_shyft():
         "--windows-icon-from-ico=src/labelsmith/shyft/resources/icon.ico",
         "--enable-plugin=tk-inter",
         "--include-package=tkinter",
+        "--include-package=tkcalendar",
         "--include-module=labelsmith",
         "--include-module=labelsmith.shyft",
         "--include-module=labelsmith.shyft.gui",

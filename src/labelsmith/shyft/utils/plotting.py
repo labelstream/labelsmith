@@ -15,6 +15,10 @@ import tempfile
 import threading
 import webbrowser
 import logging
+import tkinter as tk
+from tkinter import simpledialog, messagebox, ttk
+# from tkcalendar import Calendar, DateEntry
+import datetime
 from datetime import datetime
 from labelsmith.shyft.constants import APP_DATA_DIR, DATA_FILE_PATH
 
@@ -223,15 +227,111 @@ class Plotting:
         plotter = Plotting()
         plotter.plot_interactive_trend(window=7, metric='time')
 
-    @staticmethod
-    def plot_productivity_custom():
-        plotter = Plotting()
-        window = int(input("Enter the number of days for the rolling average (default 7): ") or 7)
-        metric = input("Enter the metric to plot (tasks/time): ").lower()
-        if metric not in ['tasks', 'time']:
-            print("Invalid metric. Using 'tasks' as default.")
-            metric = 'tasks'
-        start_date = input("Enter start date (YYYY-MM-DD) or press Enter for all data: ")
-        end_date = input("Enter end date (YYYY-MM-DD) or press Enter for all data: ")
+    # class ProductivityPlotDialog(tk.Toplevel):
+    #     def __init__(self, parent):
+    #         super().__init__(parent)
+    #         self.title("Productivity Plot Parameters")
+    #         self.result = None
+    #         self.create_widgets()
+    #         self.geometry("500x300")  # Increased height to accommodate calendars
+    #         self.resizable(True, True)
+
+    #     def create_widgets(self):
+    #         self.columnconfigure(0, weight=1)
+    #         self.rowconfigure(0, weight=1)
+
+    #         main_frame = ttk.Frame(self, padding="20 20 20 20")
+    #         main_frame.grid(row=0, column=0, sticky="nsew")
+    #         main_frame.columnconfigure(1, weight=1)
+
+    #         # Window size input
+    #         ttk.Label(main_frame, text="Rolling average window (days):").grid(row=0, column=0, sticky="w", pady=10)
+    #         self.window_var = tk.IntVar(value=7)
+    #         ttk.Spinbox(main_frame, from_=1, to=365, textvariable=self.window_var, width=5).grid(row=0, column=1, sticky="ew", pady=10, padx=(10,0))
+
+    #         # Metric selection
+    #         ttk.Label(main_frame, text="Metric to plot:").grid(row=1, column=0, sticky="w", pady=10)
+    #         self.metric_var = tk.StringVar(value="tasks")
+    #         metric_frame = ttk.Frame(main_frame)
+    #         metric_frame.grid(row=1, column=1, sticky="ew", pady=10, padx=(10,0))
+    #         ttk.Radiobutton(metric_frame, text="Tasks", variable=self.metric_var, value="tasks").pack(side="left", padx=(0,10))
+    #         ttk.Radiobutton(metric_frame, text="Time", variable=self.metric_var, value="time").pack(side="left")
+
+    #         # Date range selection
+    #         ttk.Label(main_frame, text="Start date:").grid(row=2, column=0, sticky="w", pady=10)
+    #         self.start_date_var = tk.StringVar()
+    #         ttk.Entry(main_frame, textvariable=self.start_date_var, width=12).grid(row=2, column=1, sticky="ew", pady=10, padx=(10,0))
+    #         ttk.Button(main_frame, text="Select", command=lambda: self.show_calendar(self.start_date_var)).grid(row=2, column=2, padx=(5,0))
+
+    #         ttk.Label(main_frame, text="End date:").grid(row=3, column=0, sticky="w", pady=10)
+    #         self.end_date_var = tk.StringVar()
+    #         ttk.Entry(main_frame, textvariable=self.end_date_var, width=12).grid(row=3, column=1, sticky="ew", pady=10, padx=(10,0))
+    #         ttk.Button(main_frame, text="Select", command=lambda: self.show_calendar(self.end_date_var)).grid(row=3, column=2, padx=(5,0))
+
+    #         # Buttons
+    #         button_frame = ttk.Frame(main_frame)
+    #         button_frame.grid(row=4, column=0, columnspan=3, pady=(20,0), sticky="ew")
+    #         button_frame.columnconfigure(0, weight=1)
+    #         button_frame.columnconfigure(1, weight=1)
+            
+    #         ttk.Button(button_frame, text="OK", command=self.on_ok).grid(row=0, column=0, padx=(0,5), sticky="e")
+    #         ttk.Button(button_frame, text="Cancel", command=self.on_cancel).grid(row=0, column=1, padx=(5,0), sticky="w")
+
+    #     def show_calendar(self, date_var):
+    #         top = tk.Toplevel(self)
+    #         top.title("Select Date")
+    #         top.grab_set()
+
+    #         def on_date_select(event):
+    #             date_var.set(cal.get_date())
+    #             top.destroy()
+            
+    #         cal = Calendar(top, selectmode='day', date_pattern='y-mm-dd')
+    #         cal.pack(padx=10, pady=10)
+    #         cal.bind("<<CalendarSelected>>", on_date_select)
+            
+    #         ok_button = ttk.Button(top, text="OK", command=lambda: self.set_date(top, cal, date_var))
+    #         ok_button.pack(pady=10)
+
+    #         # Set focus to the calendar
+    #         cal.focus_set()
+
+    #     def set_date(self, top, cal, date_var):
+    #         date_var.set(cal.get_date())
+    #         top.destroy()
+
+    #     def on_ok(self):
+    #         try:
+    #             start_date = datetime.datetime.strptime(self.start_date_var.get(), '%Y-%m-%d').date()
+    #             end_date = datetime.datetime.strptime(self.end_date_var.get(), '%Y-%m-%d').date()
+    #             self.result = {
+    #                 'window': self.window_var.get(),
+    #                 'metric': self.metric_var.get(),
+    #                 'start_date': start_date.strftime('%Y-%m-%d'),
+    #                 'end_date': end_date.strftime('%Y-%m-%d')
+    #             }
+    #             self.destroy()
+    #         except ValueError:
+    #             messagebox.showerror("Invalid Date", "Please enter valid dates in the format YYYY-MM-DD")
+
+    #     def on_cancel(self):
+    #         self.result = None
+    #         self.destroy()
+
+    # @classmethod
+    # def plot_productivity_custom(cls):
+    #     root = tk.Tk()
+    #     root.withdraw()  # Hide the root window
+    #     dialog = cls.ProductivityPlotDialog(root)
+    #     dialog.grab_set()
+    #     root.wait_window(dialog)
         
-        plotter.plot_interactive_trend(window=window, metric=metric, start_date=start_date or None, end_date=end_date or None)
+    #     if dialog.result:
+    #         plotter = cls()
+    #         plotter.plot_interactive_trend(
+    #             window=dialog.result['window'],
+    #             metric=dialog.result['metric'],
+    #             start_date=dialog.result['start_date'],
+    #             end_date=dialog.result['end_date']
+    #         )
+    #     root.destroy()

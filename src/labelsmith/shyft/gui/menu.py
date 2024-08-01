@@ -17,7 +17,7 @@ def setup_menu(gui):
 def setup_file_menu(gui):
     gui.file_menu = tk.Menu(gui.menu_bar, tearoff=0)
     gui.file_menu.add_command(label="Plot productivity", command=plotter.plot_productivity_default)
-    gui.file_menu.add_command(label="Plot productivity...", command=Plotting.plot_productivity_custom)
+    # gui.file_menu.add_command(label="Plot productivity...", command=lambda: Plotting.plot_productivity_custom())
     gui.menu_bar.add_cascade(label="File", menu=gui.file_menu)
 
 def setup_theme_menu(gui):
