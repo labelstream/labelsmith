@@ -1,5 +1,6 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, simpledialog
+from labelsmith.shyft.core import config_manager
 from labelsmith.shyft.core.data_manager import data_manager
 from labelsmith.shyft.utils.file_utils import get_log_files
 from labelsmith.shyft.utils.system_utils import get_modifier_key
@@ -83,6 +84,8 @@ class CalculateTotalsDialog:
     def __init__(self, parent):
         self.window = tk.Toplevel(parent)
         self.window.title("Totals")
+        self.config = config_manager.load_config()
+        self.tax_rate = float(self.config['Settings']['tax_rate'])
         self.create_widgets()
         self.window.bind(f"<{get_modifier_key()}-w>", self.close_window)
         self.window.bind(f"<{get_modifier_key()}-W>", self.close_window)
@@ -95,14 +98,14 @@ class CalculateTotalsDialog:
         total_gross_pay = sum(float(shift["Gross pay"]) for shift in shifts)
         total_tasks_completed = sum(int(shift.get("Tasks completed", 0)) for shift in shifts)
         
-        tax_liability = total_gross_pay * 0.27
+        tax_liability = total_gross_pay * self.tax_rate
         net_income = total_gross_pay - tax_liability
 
         columns = ("Description", "Value")
         self.totals_tree = ttk.Treeview(self.window, columns=columns, show="headings")
         self.totals_tree.heading("Description", text="Description", anchor="w")
         self.totals_tree.heading("Value", text="Value", anchor="w")
-        self.totals_tree.column("Description", anchor="w", width=200)
+        self.totals_tree.column("Description", anchor="w", width=250)
         self.totals_tree.column("Value", anchor="e", width=150)
         self.totals_tree.pack(expand=True, fill="both")
 
@@ -110,8 +113,22 @@ class CalculateTotalsDialog:
         self.totals_tree.insert("", "end", values=("Total Hours Worked", f"{total_hours_worked:.2f}"))
         self.totals_tree.insert("", "end", values=("Total Tasks Completed", total_tasks_completed))
         self.totals_tree.insert("", "end", values=("Total Gross Pay", f"${total_gross_pay:.2f}"))
-        self.totals_tree.insert("", "end", values=("Estimated Tax Liability (27%)", f"${tax_liability:.2f}"))
+        self.totals_tree.insert("", "end", values=(f"Estimated Tax Liability ({self.tax_rate:.2%})", f"${tax_liability:.2f}"))
         self.totals_tree.insert("", "end", values=("Estimated Net Income", f"${net_income:.2f}"))
+
+        # Add tax rate change button
+        self.change_tax_rate_button = ttk.Button(self.window, text="Change Tax Rate", command=self.change_tax_rate)
+        self.change_tax_rate_button.pack(pady=10)
+
+    def change_tax_rate(self):
+        new_rate = simpledialog.askfloat("Change Tax Rate", "Enter new tax rate (as a decimal):", 
+                                         minvalue=0.0, maxvalue=1.0, initialvalue=self.tax_rate)
+        if new_rate is not None:
+            self.tax_rate = new_rate
+            self.config['Settings']['tax_rate'] = str(new_rate)
+            config_manager.save_config(self.config)
+            self.window.destroy()
+            CalculateTotalsDialog(self.window.master)  # Recreate the dialog with the new tax rate
 
     def close_window(self, event):
         self.window.destroy()

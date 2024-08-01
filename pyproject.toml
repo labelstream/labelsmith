@@ -25,7 +25,8 @@ nuitka = "^2.4.2"
 
 [tool.poetry.scripts]
 shyft = "labelsmith.shyft.Shyft:main"
-build-shyft = "scripts.build:build_shyft"
+build-macos = "scripts.build_macos:build_shyft"
+build-windows = "scripts.build_windows:build_shyft"
 
 [build-system]
 requires = ["poetry-core"]

@@ -11,6 +11,13 @@ def load_config():
         logger.debug(f"Configuration loaded from {CONFIG_FILE}")
     else:
         logger.warning(f"Configuration file {CONFIG_FILE} does not exist. Using default settings.")
+    
+    # Add default tax rate if it doesn't exist
+    if 'Settings' not in config:
+        config['Settings'] = {}
+    if 'tax_rate' not in config['Settings']:
+        config['Settings']['tax_rate'] = '0.27'
+    
     return config
 
 def save_config(config):
