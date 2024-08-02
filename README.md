@@ -4,15 +4,15 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Project Status: Beta – Initial beta release, core functionality implemented but lacking test coverage.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-## ⚠️ Early Beta Release Notice
+## ⚠️ Beta Release Notice
 
-**Important:** Labelsmith is currently in its early beta stage (v0.0.1b3). While core functionality is implemented and the software is usable, it is important to note:
+**Important:** Labelsmith is currently in its beta stage (v0.0.1b3). While core functionality is implemented and the software is usable, please note:
 
-- The project currently lacks a comprehensive test suite.
-- It may contain bugs and is subject to significant changes.
-- The API may undergo changes as we refine the project.
+- The project is still developing its comprehensive test suite.
+- It may contain bugs and is subject to changes as we refine the project.
+- The API may undergo modifications based on user feedback and further development.
 
-We welcome early adopters and greatly appreciate your feedback, but please use caution when implementing in production environments.
+We welcome early adopters and greatly appreciate your feedback. However, please exercise caution when implementing in production environments.
 
 ## Project Description
 
@@ -42,7 +42,7 @@ The `labelsmith` package currently offers the following core modules:
 pip install labelsmith
 ```
 
-Please note that this is an early beta release. We strongly recommend installing in a virtual environment for testing purposes.
+We recommend installing in a virtual environment for testing purposes.
 
 ## Contributing
 
@@ -50,12 +50,20 @@ We welcome contributions from developers of all skill levels! Check out our [CON
 
 ## Roadmap
 
-1. **[HIGH PRIORITY] Implement comprehensive test suite**
-2. Increase code coverage to 80%
-3. Develop plugin system for custom annotator tools
-4. Expand and improve core functionality of the `shyft` module
-5. Enhance the `utils.metrics` module with more advanced analytics
+1. **[HIGH PRIORITY] Expand test coverage**
+2. Enhance productivity visualization tools
+3. Implement tabbed interface for task history review
+4. Develop plugin system for custom annotator tools
+5. Expand and improve core functionality of the `shyft` module
 6. Create comprehensive documentation and API reference
+
+## Recent Changes (v0.0.1b3)
+
+- Fixed issue with shift log files not being properly persisted locally
+- Corrected UI bug preventing theme changes
+- Improved focus management in entry dialogs
+
+For a full list of changes, please see our [CHANGELOG.md](https://github.com/labelstream/labelsmith/blob/main/CHANGELOG.md).
 
 ## License
 
@@ -79,7 +87,7 @@ limitations under the License.
 
 ---
 
-Labelsmith is under active development. Star [this repo](https://github.com/labelstream/labelsmith) to stay updated on our progress, and feel free to open issues for feature requests or bug reports. Together, we're working toward a future in which data annotators find themselves more empowered and better equipped to make an even greater impact in the world of AI and machine learning. Join us! 🚀
+Labelsmith is under active development. Star [this repo](https://github.com/labelstream/labelsmith) to stay updated on our progress, and feel free to open issues for feature requests or bug reports. Together, we're working toward a future in which data annotators are more empowered and better equipped to make an even greater impact in the world of AI and machine learning. Join us! 🚀
 
 ## Disclaimer
 
