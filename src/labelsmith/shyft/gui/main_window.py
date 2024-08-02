@@ -153,6 +153,7 @@ class ShyftGUI:
             return
         selected_id = selected_item[0]
         EditShiftForm(self.root, selected_id, self.refresh_view)
+        
 
     def delete_shift(self, event=None):
         selected_item = self.tree.selection()

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "labelsmith"
-version = "0.0.1b3"
+version = "0.0.1b4"
 description = "A productivity suite for data annotators"
 authors = ["K. LeBryce <k.lebryce@pm.me>"]
 license = "Apache-2.0"

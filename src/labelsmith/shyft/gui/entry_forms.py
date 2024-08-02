@@ -12,6 +12,7 @@ class ManualEntryForm:
         self.window.title("Manual Entry")
         self.callback = callback
         self.create_widgets()
+        self.window.grab_set()
         self.window.bind(f"<{get_modifier_key()}-w>", self.close_window)
         self.window.bind(f"<{get_modifier_key()}-W>", self.close_window)
         self.window.bind("<Return>", self.submit)
@@ -93,6 +94,7 @@ class EditShiftForm:
         self.callback = callback
         self.shift_data = data_manager.get_shifts()[self.shift_id]
         self.create_widgets()
+        self.window.grab_set()
         self.window.bind(f"<{get_modifier_key()}-w>", self.close_window)
         self.window.bind(f"<{get_modifier_key()}-W>", self.close_window)
         self.window.bind("<Return>", self.submit)
@@ -156,6 +158,5 @@ class EditShiftForm:
             raise ValueError("Invalid input for numerical fields. Please enter valid numbers.")
 
     def close_window(self, event=None):
+        self.window.grab_release()
         self.window.destroy()
-        self.parent.focus_force()
-

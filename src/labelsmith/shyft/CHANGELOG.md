@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integration with external time tracking APIs for more comprehensive productivity analysis
 - Dark mode option for reduced eye strain during night shifts
 
+## [0.0.1b4] - 2024-08-02
+
+### Fixed
+- "Edit Shift" window now properly grabs and releases focus.
+
 ## [0.0.1b3] - 2024-08-01
 
 ### Fixed
@@ -74,5 +79,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Labelsmith is released under the Apache License, Version 2.0. See the LICENSE file in the project repository for full details.
 
 [Unreleased]: https://github.com/LabelSTREAM/labelsmith/compare/v0.0.1b3...HEAD
+[0.0.1b4]: https://github.com/LabelSTREAM/labelsmith/compare/v0.0.1b3...v0.0.1b4
 [0.0.1b3]: https://github.com/LabelSTREAM/labelsmith/compare/v0.0.1b2...v0.0.1b3
 [0.0.1b2]: https://github.com/LabelSTREAM/labelsmith/releases/tag/v0.0.1b2
