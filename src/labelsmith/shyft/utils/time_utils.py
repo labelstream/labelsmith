@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 def validate_time_format(time_str: str) -> bool:
     """

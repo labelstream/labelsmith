@@ -15,9 +15,9 @@ class ViewLogsDialog:
         self.window = tk.Toplevel(parent)
         self.window.title("View Logs")
         self.window.geometry("480x640")
-        self.create_widgets()
         self.parent.tree = tree
         self.parent.callback = callback
+        self.create_widgets()
         self.window.bind(f"<{get_modifier_key()}-w>", self.close_window)
         self.window.bind(f"<{get_modifier_key()}-W>", self.close_window)
 
@@ -33,25 +33,41 @@ class ViewLogsDialog:
             self.log_tree.event_generate("<<TreeviewSelect>>")
 
     def create_widgets(self):
+        self.window.grid_columnconfigure(0, weight=1)
+        self.window.grid_rowconfigure(1, weight=1)
+
         tree_frame = ttk.Frame(self.window)
-        tree_frame.pack(fill=tk.X, padx=10, pady=(10, 5))
+        tree_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=(10, 5))
+        tree_frame.grid_columnconfigure(0, weight=1)
+        tree_frame.grid_rowconfigure(0, weight=1)
 
         self.log_tree = ttk.Treeview(tree_frame, columns=["Log Files"], show="headings", height=4)
         self.log_tree.heading("Log Files", text="Log Files")
         self.log_tree.column("Log Files", anchor="w")
-        self.log_tree.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.log_tree.grid(row=0, column=0, sticky="nsew")
+
+        tree_scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=self.log_tree.yview)
+        tree_scrollbar.grid(row=0, column=1, sticky="ns")
+        self.log_tree.configure(yscrollcommand=tree_scrollbar.set)
 
         self.log_tree.tag_configure("highlight", background="#FFBE98")
 
-        log_files = get_log_files(Path(LOGS_DIR))  # Update this path
+        log_files = get_log_files(Path(LOGS_DIR))
 
         for log_file in log_files:
             self.log_tree.insert("", "end", iid=log_file, values=[log_file])
 
         text_frame = ttk.Frame(self.window)
-        text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=(5, 10))
+        text_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=(5, 10))
+        text_frame.grid_columnconfigure(0, weight=1)
+        text_frame.grid_rowconfigure(0, weight=1)
+
         self.text_widget = tk.Text(text_frame, wrap="word")
-        self.text_widget.pack(fill=tk.BOTH, expand=True)
+        self.text_widget.grid(row=0, column=0, sticky="nsew")
+
+        text_scrollbar = ttk.Scrollbar(text_frame, orient="vertical", command=self.text_widget.yview)
+        text_scrollbar.grid(row=0, column=1, sticky="ns")
+        self.text_widget.configure(yscrollcommand=text_scrollbar.set)
 
         self.log_tree.bind("<<TreeviewSelect>>", self.on_log_selection)
 
@@ -63,7 +79,7 @@ class ViewLogsDialog:
         if selected_item:
             self.log_tree.item(selected_item[0], tags=("highlight",))
 
-            log_file_path = Path(LOGS_DIR) / selected_item[0]  # Update this path
+            log_file_path = Path(LOGS_DIR) / selected_item[0]
             try:
                 with open(log_file_path, "r", encoding="utf-8") as file:
                     content = file.read()

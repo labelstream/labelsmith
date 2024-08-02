@@ -2,7 +2,7 @@ import configparser
 import logging
 from labelsmith.shyft.constants import CONFIG_FILE
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 def load_config():
     config = configparser.ConfigParser()

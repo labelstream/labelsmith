@@ -1,14 +1,19 @@
 import json
 import logging
-from labelsmith.shyft.constants import DATA_FILE_PATH, LOGS_DIR
+import os
+from labelsmith.shyft.constants import (
+    APP_NAME, APP_AUTHOR, APP_DATA_DIR, 
+    CONFIG_FILE, DATA_FILE_PATH, LOGS_DIR
+    )
+from pathlib import Path
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 class DataManager:
     def __init__(self):
         self.data = {"data": {}}
         self.load_data()
-
+        
     def load_data(self):
         try:
             if DATA_FILE_PATH.exists():
@@ -47,6 +52,17 @@ class DataManager:
         if shift_id in self.data["data"]:
             del self.data["data"][shift_id]
             self.save_data()
+            
+            # Delete the corresponding Markdown file
+            md_file_path = Path(LOGS_DIR) / f"{shift_id}.md"
+            try:
+                if md_file_path.exists():
+                    os.remove(md_file_path)
+                    logger.info(f"Deleted Markdown file for shift {shift_id}.")
+                else:
+                    logger.warning(f"Markdown file for shift {shift_id} not found.")
+            except Exception as e:
+                logger.error(f"Failed to delete Markdown file for shift {shift_id}: {e}.")
         else:
             raise KeyError(f"Shift with ID {shift_id} not found.")
 

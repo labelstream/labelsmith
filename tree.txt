@@ -4,7 +4,7 @@ labelsmith
 ├── README.md
 ├── docs
 ├── output
-│   └── Shyft-0.0.1b2.dmg
+│   └── Shyft-0.0.1b3.dmg
 ├── poetry.lock
 ├── pyproject.toml
 ├── requirements.txt
@@ -15,6 +15,53 @@ labelsmith
 ├── src
 │   └── labelsmith
 │       ├── __init__.py
+│       ├── resources
+│       │   └── macOS
+│       │       └── macOS
+│       │           └── AppIcon.appiconset
+│       │               ├── Contents.json
+│       │               ├── Icons.xcassets
+│       │               │   └── LabelSTREAMIcon.appiconset
+│       │               │       ├── 100.png
+│       │               │       ├── 1024-mac.png
+│       │               │       ├── 1024.png
+│       │               │       ├── 114.png
+│       │               │       ├── 120.png
+│       │               │       ├── 128-mac.png
+│       │               │       ├── 144.png
+│       │               │       ├── 152.png
+│       │               │       ├── 16-mac.png
+│       │               │       ├── 167.png
+│       │               │       ├── 172.png
+│       │               │       ├── 180.png
+│       │               │       ├── 196.png
+│       │               │       ├── 20.png
+│       │               │       ├── 216.png
+│       │               │       ├── 256-mac.png
+│       │               │       ├── 29.png
+│       │               │       ├── 32-mac.png
+│       │               │       ├── 40.png
+│       │               │       ├── 48.png
+│       │               │       ├── 50.png
+│       │               │       ├── 512-mac.png
+│       │               │       ├── 55.png
+│       │               │       ├── 57.png
+│       │               │       ├── 58.png
+│       │               │       ├── 60.png
+│       │               │       ├── 64-mac.png
+│       │               │       ├── 72.png
+│       │               │       ├── 76.png
+│       │               │       ├── 80.png
+│       │               │       ├── 87.png
+│       │               │       ├── 88.png
+│       │               │       └── Contents.json
+│       │               ├── LabelSTREAMIcon-1024.png
+│       │               ├── LabelSTREAMIcon-128.png
+│       │               ├── LabelSTREAMIcon-16.png
+│       │               ├── LabelSTREAMIcon-256.png
+│       │               ├── LabelSTREAMIcon-32.png
+│       │               ├── LabelSTREAMIcon-512.png
+│       │               └── LabelSTREAMIcon-64.png
 │       ├── shyft
 │       │   ├── Shyft.py
 │       │   ├── __init__.py
@@ -70,4 +117,4 @@ labelsmith
 │   └── __init__.py
 └── tree.txt
 
-16 directories, 55 files
+22 directories, 96 files

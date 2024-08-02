@@ -6,7 +6,7 @@
 
 ## ⚠️ Early Beta Release Notice
 
-**Important:** Labelsmith is currently in its early beta stage (v0.0.1b2). While core functionality is implemented and the software is usable, it is important to note:
+**Important:** Labelsmith is currently in its early beta stage (v0.0.1b3). While core functionality is implemented and the software is usable, it is important to note:
 
 - The project currently lacks a comprehensive test suite.
 - It may contain bugs and is subject to significant changes.

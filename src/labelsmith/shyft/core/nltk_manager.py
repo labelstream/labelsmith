@@ -4,7 +4,7 @@ from pathlib import Path
 import logging
 from labelsmith.shyft.constants import APP_DATA_DIR
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 def ensure_nltk_data():
     nltk_data_path = APP_DATA_DIR / "nltk_data"

@@ -1,5 +1,4 @@
 from . import Shyft
-from .Shyft import main
 
 def main():
     Shyft.main()

@@ -17,12 +17,11 @@ import webbrowser
 import logging
 import tkinter as tk
 from tkinter import simpledialog, messagebox, ttk
-# from tkcalendar import Calendar, DateEntry
 import datetime
 from datetime import datetime
 from labelsmith.shyft.constants import APP_DATA_DIR, DATA_FILE_PATH
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 class Plotting:
     def __init__(self):

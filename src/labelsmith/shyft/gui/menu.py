@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import colorchooser, ttk, messagebox
 from labelsmith.shyft.core import config_manager
+from labelsmith.shyft.core.config_manager import load_config, save_config
 from labelsmith.shyft.utils.plotting import Plotting
 
 plotter = Plotting ()
-config = config_manager.load_config()
+config = load_config()
 
 def setup_menu(gui):
     gui.menu_bar = tk.Menu(gui.root)
@@ -28,6 +29,7 @@ def setup_theme_menu(gui):
     if gui.root.tk.call("tk", "windowingsystem") == "aqua":
         gui.theme_menu.add_command(label="Aqua", command=lambda: change_theme(gui, "aqua"))
     gui.menu_bar.add_cascade(label="Theme", menu=gui.theme_menu)
+    enable_theme_menu(gui, gui.theme_menu)
 
 def setup_view_menu(gui):
     gui.view_menu = tk.Menu(gui.menu_bar, tearoff=0)

@@ -31,7 +31,7 @@ def build_shyft():
         "-m", "nuitka",
         "--standalone",
         "--macos-create-app-bundle",
-        f"--macos-app-name=Shyft",
+        "--macos-app-name=Shyft",
         "--macos-app-icon=src/labelsmith/shyft/resources/icon.icns",
         "--macos-sign-identity=-",  # Use ad-hoc signing
         '--macos-app-protected-resource="NSUserSelectedFilesReadWriteAccess:Read and write access to user-selected files"',
@@ -39,7 +39,6 @@ def build_shyft():
         '--macos-app-protected-resource="NSFileManagerAccess:~/Library/Application Support/Labelsmith/,~/Library/Application Support/Labelsmith/Shyft/,~/Library/Caches/Labelsmith/,~/Library/Caches/Labelsmith/Shyft/,~/.config/Labelsmith/,~/.config/Labelsmith/Shyft/:Read and write access to application directories"',
         "--enable-plugin=tk-inter",
         "--include-package=tkinter",
-        "--include-package=tkcalendar",
         "--include-module=labelsmith",
         "--include-module=labelsmith.shyft",
         "--include-module=labelsmith.shyft.gui",

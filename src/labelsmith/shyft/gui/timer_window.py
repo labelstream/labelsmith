@@ -6,7 +6,7 @@ import time
 import logging
 from labelsmith.shyft.constants import CONFIG_FILE
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 class TimerWindow:
     def __init__(self, root, time_color="#A78C7B", bg_color="#FFBE98"):
