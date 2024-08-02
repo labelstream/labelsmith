@@ -9,7 +9,8 @@ from labelsmith.shyft.gui.dialogs import ViewLogsDialog, CalculateTotalsDialog
 from labelsmith.shyft.gui.timer_window import TimerWindow
 from labelsmith.shyft.utils.system_utils import prevent_sleep, allow_sleep, get_modifier_key
 from labelsmith.shyft.gui.custom_widgets import DictionaryLookupText, CustomTooltip
-from labelsmith.shyft.constants import CONFIG_FILE
+from labelsmith.shyft.constants import CONFIG_FILE, LOGS_DIR
+from pathlib import Path
 
 class ShyftGUI:
     def __init__(self, root):
@@ -165,6 +166,10 @@ class ShyftGUI:
                 data_manager.delete_shift(selected_id)
                 self.refresh_view()
                 logger.info(f"Shift {selected_id} deleted.")
+            except FileNotFoundError as e:
+                md_file_path = Path(LOGS_DIR) / f"{selected_id}.md"
+                if not md_file_path.exists():
+                    logger.warning(f"Markdown file for shift {selected_id} was not found during deletion: {str(e)}")
             except Exception as e:
                 messagebox.showerror("Error", f"An error occurred while deleting the shift: {str(e)}")
                 logger.error(f"Failed to delete shift {selected_id}: {str(e)}")
@@ -174,10 +179,20 @@ class ShyftGUI:
         def on_cancel():
             self.root.after(100, self.regain_focus)
 
-        # Create a custom dialog
+        # Calculate the position for the dialog
+        dialog_width = 340  # Estimated width
+        dialog_height = 100  # Estimated height
+        parent_x = self.root.winfo_x()
+        parent_y = self.root.winfo_y()
+        parent_width = self.root.winfo_width()
+        parent_height = self.root.winfo_height()
+        x = parent_x + (parent_width // 2) - (dialog_width // 2)
+        y = parent_y + (parent_height // 2) - (dialog_height // 2)
+
+        # Create a custom dialog with pre-calculated position
         dialog = tk.Toplevel(self.root)
         dialog.title("Confirm Delete")
-        dialog.geometry("340x100")
+        dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
         dialog.transient(self.root)
         dialog.grab_set()
         dialog.resizable(False, False)

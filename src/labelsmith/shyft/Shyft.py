@@ -7,7 +7,7 @@ from labelsmith.shyft.core.nltk_manager import initialize_nltk
 from labelsmith.shyft.utils.log_config import configure_logging
 from labelsmith.shyft.constants import APP_AUTHOR, APP_DATA_DIR, APP_NAME, DATA_FILE_PATH, CONFIG_FILE, LOGS_DIR
 
-logger = logging.getLogger(__name__)
+logger = configure_logging()
 
 def run_tkinter_app():
     root = tk.Tk()

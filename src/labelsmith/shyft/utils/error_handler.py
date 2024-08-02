@@ -3,7 +3,7 @@ import traceback
 from typing import Callable, Any
 from functools import wraps
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 def error_handler(func: Callable) -> Callable:
     """

@@ -4,7 +4,7 @@ import logging
 from labelsmith.shyft.core import config_manager
 
 config = config_manager.load_config()
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 class ThemeManager:
     @staticmethod

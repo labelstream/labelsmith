@@ -4,7 +4,7 @@ import logging
 import tkinter as tk
 from typing import Optional
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 def get_modifier_key() -> str:
     """
@@ -53,7 +53,7 @@ def allow_sleep(process: Optional[subprocess.Popen]) -> None:
 import tkinter as tk
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 def modkey_backspace(event) -> str:
     """

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 def get_log_files(log_dir: Path) -> List[str]:
     """

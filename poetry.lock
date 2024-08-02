@@ -23,20 +23,6 @@ files = [
 ]
 
 [[package]]
-name = "babel"
-version = "2.15.0"
-description = "Internationalization utilities"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "Babel-2.15.0-py3-none-any.whl", hash = "sha256:08706bdad8d0a3413266ab61bd6c34d0c28d6e1e7badf40a2cebe67644e2e1fb"},
-    {file = "babel-2.15.0.tar.gz", hash = "sha256:8daf0e265d05768bc6c7a314cf1321e9a123afc328cc635c18622a2f30a04413"},
-]
-
-[package.extras]
-dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
-
-[[package]]
 name = "black"
 version = "24.4.2"
 description = "The uncompromising code formatter."
@@ -2000,20 +1986,6 @@ files = [
 ]
 
 [[package]]
-name = "tkcalendar"
-version = "1.6.1"
-description = "Calendar and DateEntry widgets for Tkinter"
-optional = false
-python-versions = "*"
-files = [
-    {file = "tkcalendar-1.6.1-py3-none-any.whl", hash = "sha256:9d3a80816a7b32d64fab696fa3d2a007fb23c87953267d5e343a38ff4cd7c15c"},
-    {file = "tkcalendar-1.6.1.tar.gz", hash = "sha256:5edf958c0a59429e90309e9b805b2e229192bbcab952460247204d7030eea5cf"},
-]
-
-[package.dependencies]
-babel = "*"
-
-[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -2339,4 +2311,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9,<3.13"
-content-hash = "1c1d6efe83521e5eba7c86a64df1a0feede1f32e623a4692eb5750242f366a72"
+content-hash = "1683f5f090918181d939f574dd5c59239db7507997e81f2a9a802ec407b4cc65"

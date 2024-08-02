@@ -1,16 +1,17 @@
-import tkinter as tk
-from tkinter import simpledialog, messagebox, ttk
-from datetime import datetime
-import threading
 import logging
+import tkinter as tk
+import threading
+from datetime import datetime
 from labelsmith.shyft.gui.timer_window import TimerWindow
 from labelsmith.shyft.gui.custom_widgets import CustomTooltip, DictionaryLookupText, IndependentAskString
 from labelsmith.shyft.core.data_manager import data_manager
 from labelsmith.shyft.utils.time_utils import calculate_duration, format_to_two_decimals
 from labelsmith.shyft.utils.system_utils import prevent_sleep, allow_sleep, get_modifier_key
-from labelsmith.shyft.constants import CONFIG_FILE
+from labelsmith.shyft.constants import CONFIG_FILE, LOGS_DIR
+from pathlib import Path
+from tkinter import simpledialog, messagebox, ttk
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("labelsmith")
 
 class Autologger:
     def __init__(
@@ -38,11 +39,13 @@ class Autologger:
         self.menu_bar = menu_bar
 
     def start(self):
+        self.disable_theme_menu()
         shared_data = self.collect_shared_data()
         if shared_data is None:  # User cancelled
             return
         self.prevent_sleep()
         self.attempt_task(shared_data)
+
 
     def collect_shared_data(self):
         shared_fields = [
@@ -70,7 +73,6 @@ class Autologger:
             self.timer_window.start()
             topmost_state = self.config.getboolean("Theme", "timer_topmost", fallback=False)
             self.timer_window.root.attributes("-topmost", topmost_state)
-            self.disable_theme_menu()
             self.enable_topmost_menu()
 
         self.task_start_time = datetime.now()
@@ -207,23 +209,38 @@ class Autologger:
             self.finish_logging()
 
     def finish_logging(self, cancel=False):
-        if cancel or not self.collected_data:
+        try:
+            if cancel or not self.collected_data:
+                if cancel:
+                    messagebox.showinfo("Cancelled", "Autologger process cancelled.")
+            else:
+                shift_id = self.log_shift()
+                if shift_id:
+                    self.save_shift_markdown(shift_id)
+        finally:
+            # Always perform these cleanup actions
             if self.timer_window and tk.Toplevel.winfo_exists(self.timer_window.root):
                 self.timer_window.reset()
                 self.timer_window.on_close()
                 self.timer_window = None
-                self.enable_theme_menu()
-                self.disable_topmost_menu()
-            if cancel:
-                messagebox.showinfo("Cancelled", "Autologger process cancelled.")
-        else:
-            self.log_shift()
-        
+
         self.allow_sleep()  # Ensure caffeinate is terminated when the app quits
         self.parent.grab_set()
         self.parent.tree.focus_set()
         self.parent.callback()
 
+    def save_shift_markdown(self, shift_id: str):
+        markdown_content = self.create_shift_markdown(shift_id)
+        logs_dir = Path(LOGS_DIR)
+        logs_dir.mkdir(parents=True, exist_ok=True)
+        file_path = logs_dir / f"{shift_id}.md"
+        
+        try:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(markdown_content)
+            logger.info(f"Shift log saved: {file_path}")
+        except Exception as e:
+            logger.error(f"Failed to save shift log: {e}")
 
     def log_shift(self):
         if self.timer_window and tk.Toplevel.winfo_exists(self.timer_window.root):
@@ -265,9 +282,12 @@ class Autologger:
             logger.info(
                 f"Shift logged successfully. {tasks_completed} tasks completed."
             )
+
+            return formatted_id
         else:
             messagebox.showerror("Error", "Timer is not running.")
             logger.error("Failed to log shift: Timer is not running.")
+            return None
 
         if self.timer_window and tk.Toplevel.winfo_exists(self.timer_window.root):
             self.timer_window.reset()
@@ -275,6 +295,32 @@ class Autologger:
             self.timer_window = None
             self.enable_theme_menu()
             self.disable_topmost_menu()
+        
+    def create_shift_markdown(self, shift_id: str) -> str:
+        markdown_content = f"""# `{shift_id}.md`
+
+----
+"""
+        for i, task_data in enumerate(self.collected_data, start=1):
+            markdown_content += f"""
+
+{i}. `{task_data['Platform ID']}`
+
+[Permalink]
+{task_data['Permalink']}
+
+[Response IDs]
+1. {task_data['Response #1 ID']}
+2. {task_data['Response #2 ID']}
+
+[Rank]
+{task_data['Rank']}
+
+[Justification]
+{task_data['Justification']}
+
+"""
+        return markdown_content
 
     def prevent_sleep(self):
         self.caffeinate_process = prevent_sleep(self)
