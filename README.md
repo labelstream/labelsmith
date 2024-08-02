@@ -6,7 +6,7 @@
 
 ## ⚠️ Beta Release Notice
 
-**Important:** Labelsmith is currently in its beta stage (v0.0.1b3). While core functionality is implemented and the software is usable, please note:
+**Important:** Labelsmith is currently in its beta stage (v0.0.1b4). While core functionality is implemented and the software is usable, please note:
 
 - The project is still developing its comprehensive test suite.
 - It may contain bugs and is subject to changes as we refine the project.
@@ -57,11 +57,9 @@ We welcome contributions from developers of all skill levels! Check out our [CON
 5. Expand and improve core functionality of the `shyft` module
 6. Create comprehensive documentation and API reference
 
-## Recent Changes (v0.0.1b3)
+## Recent Changes (v0.0.1b4)
 
-- Fixed issue with shift log files not being properly persisted locally
-- Corrected UI bug preventing theme changes
-- Improved focus management in entry dialogs
+- Fixed an issue with the "Edit Shift" dialog that prevented the window from properly grabbing and releasing focus
 
 For a full list of changes, please see our [CHANGELOG.md](https://github.com/labelstream/labelsmith/blob/main/CHANGELOG.md).
 

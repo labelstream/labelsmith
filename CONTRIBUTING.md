@@ -8,7 +8,7 @@ Labelsmith is an open-source Python project designed to streamline data annotato
 
 As part of LabelSTREAM, Labelsmith is committed to promoting transparency, responsibility, and ethicality in algorithmic management within the data annotation field.
 
-Currently, Labelsmith is in its early beta stage (v0.0.1b3). While the core functionality is implemented and the software is usable, we are in a crucial phase of development:
+Currently, Labelsmith is in its early beta stage (v0.0.1b4). While the core functionality is implemented and the software is usable, we are in a crucial phase of development:
 
 - We are actively working on implementing a comprehensive test suite (highest priority).
 - The API may undergo changes as we refine the project.
